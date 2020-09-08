@@ -6,14 +6,17 @@
 package com.expense.myapp.features.users;
 
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 
 /**
  *
  * @author Lenovo
  */
-//@Repository
-public interface UsersRepository extends JpaRepository<Users, Integer>{
-    
+public interface UserService {
+        public List<User> findAll();
+	
+	public User findById(int theId);
+	
+	public void save(User theUser);
+	
+	public void deleteById(int theId);
 }

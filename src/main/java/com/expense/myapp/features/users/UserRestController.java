@@ -22,76 +22,76 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class UsersRestController {
+public class UserRestController {
 
-	private UsersService userService;
+	private UserService userService;
 
-    public UsersRestController() {
+    public UserRestController() {
     }
 	
         
         
         
 	@Autowired
-	public UsersRestController(UsersService theUsersService) {
-		userService = theUsersService;
+	public UserRestController(UserService theUserService) {
+		userService = theUserService;
 	}
 	
 	// expose "/users" and return list of users
 	@GetMapping("/users")
-	public List<Users> findAll() {
+	public List<User> findAll() {
 		return userService.findAll();
 	}
 
 	// add mapping for GET /users/{userId}
 	
 	@GetMapping("/users/{userId}")
-	public Users getUsers(@PathVariable int userId) {
+	public User getUser(@PathVariable int userId) {
 		
-		Users theUsers = userService.findById(userId);
+		User theUser = userService.findById(userId);
 		
-		if (theUsers == null) {
-			throw new RuntimeException("Users id not found - " + userId);
+		if (theUser == null) {
+			throw new RuntimeException("User id not found - " + userId);
 		}
 		
-		return theUsers;
+		return theUser;
 	}
 	
 	// add mapping for POST /users - add new user
 	
 	@PostMapping("/users")
-	public Users addUsers(@RequestBody Users theUsers) {
+	public User addUser(@RequestBody User theUser) {
 		
 		// also just in case they pass an id in JSON ... set id to 0
 		// this is to force a save of new item ... instead of update
 		
-		theUsers.setId(0);
+		theUser.setId(0);
 		
-		userService.save(theUsers);
+		userService.save(theUser);
 		
-		return theUsers;
+		return theUser;
 	}
 	
 	// add mapping for PUT /users - update existing user
 	
 	@PutMapping("/users")
-	public Users updateUsers(@RequestBody Users theUsers) {
+	public User updateUser(@RequestBody User theUser) {
 		
-		userService.save(theUsers);
+		userService.save(theUser);
 		
-		return theUsers;
+		return theUser;
 	}
 	
 	// add mapping for DELETE /users/{userId} - delete user
 	
 	@DeleteMapping("/users/{userId}")
-	public String deleteUsers(@PathVariable int userId) {
+	public String deleteUser(@PathVariable int userId) {
 		
-		Users tempUsers = userService.findById(userId);
+		User tempUser = userService.findById(userId);
 		
 		// throw exception if null
 		
-		if (tempUsers == null) {
+		if (tempUser == null) {
 			throw new RuntimeException("User id not found - " + userId);
 		}
 		

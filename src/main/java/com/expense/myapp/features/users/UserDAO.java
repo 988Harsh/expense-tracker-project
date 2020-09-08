@@ -11,12 +11,12 @@ import java.util.List;
  *
  * @author Lenovo
  */
-public interface UsersService {
-        public List<Users> findAll();
-	
-	public Users findById(int theId);
-	
-	public void save(Users theUsers);
-	
+public interface UserDAO {
+        public List<User> findAll();
+
+	public void save(User theUser);
+
+	public User findById(int theId);
+
 	public void deleteById(int theId);
 }

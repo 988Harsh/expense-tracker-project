@@ -5,6 +5,9 @@
  */
 package com.expense.myapp.features.users;
 
+import com.expense.myapp.features.expenses.Expense;
+import com.expense.myapp.features.tokens.Tokens;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +26,15 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Users")
-public class Users {
+public class User {
 
-    public Users() {
+    public User() {
     }
 
-    public Users(String name, String email, String password) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-//        this.expenses = expenses;
-//        this.tokens = tokens;
     }
 
     
@@ -52,38 +53,39 @@ public class Users {
     @Column(name="password")
     private String password;
 
-//    @JsonManagedReference
-//    @OneToMany(fetch=FetchType.EAGER,
-//            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    private List<Expenses> expenses; 
-//
-//    @JsonManagedReference
-//    @OneToMany(fetch=FetchType.EAGER,
-//            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    private List<Tokens> tokens; 
+    @JsonManagedReference
+    @JsonIgnore
+    @OneToMany(targetEntity=Expense.class)//fetch=FetchType.EAGER,mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    private List<Expense> expenses; 
+
+    @JsonManagedReference
+    @JsonIgnore
+    @OneToMany(fetch=FetchType.EAGER,
+            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Tokens> tokens; 
     
     
-//    public void add(Expenses expenses)
-//    {
-//        if(this.expenses==null)
-//        {
-//            this.expenses = new ArrayList<>();
-//        }
-//        
-//        this.expenses.add(expenses);
-//        expenses.setUser(this);
-//    }
+    public void add(Expense expenses)
+    {
+        if(this.expenses==null)
+        {
+            this.expenses = new ArrayList<>();
+        }
+        
+        this.expenses.add(expenses);
+        expenses.setUser(this);
+    }
     
-//    public void add(Tokens tokens)
-//    {
-//        if(this.tokens==null)
-//        {
-//            this.tokens = new ArrayList<>();
-//        }
-//        
-//        this.tokens.add(tokens);
-//        tokens.setUsers(this);
-//    }
+    public void add(Tokens tokens)
+    {
+        if(this.tokens==null)
+        {
+            this.tokens = new ArrayList<>();
+        }
+        
+        this.tokens.add(tokens);
+        tokens.setUser(this);
+    }
     
     
     public long getId() {

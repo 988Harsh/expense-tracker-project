@@ -7,7 +7,8 @@ package com.expense.myapp.features.expenses;
 
 
 import com.expense.myapp.features.categories.Categories;
-import com.expense.myapp.features.users.Users;
+import com.expense.myapp.features.users.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -28,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Expenses")
-public class Expenses {
+public class Expense {
 
     
 
@@ -53,16 +54,14 @@ public class Expenses {
     @JsonManagedReference
     @ManyToOne( cascade= { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
-    private Users user; 
+    private User user; 
     
-    public Expenses() {
+    public Expense() {
     }
 
-    public Expenses(String description, float amount, Categories category, Users user) {
+    public Expense(String description, float amount) {
         this.description = description;
         this.amount = amount;
-        this.category = category;
-        this.user = user;
     }
     
     
@@ -99,11 +98,11 @@ public class Expenses {
         this.category = category;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

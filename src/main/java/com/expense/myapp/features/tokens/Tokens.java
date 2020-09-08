@@ -5,7 +5,7 @@
  */
 package com.expense.myapp.features.tokens;
 
-import com.expense.myapp.features.users.Users;
+import com.expense.myapp.features.users.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,13 +37,13 @@ public class Tokens {
     @JsonManagedReference
     @ManyToOne( cascade= { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
-    private Users user; 
+    private User user; 
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUsers(Users user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -68,7 +68,7 @@ public class Tokens {
     public Tokens() {
     }
 
-    public Tokens(String token, Users user) {
+    public Tokens(String token, User user) {
         this.token = token;
         this.user = user;
     }

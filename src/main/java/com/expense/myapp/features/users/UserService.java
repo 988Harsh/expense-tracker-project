@@ -12,11 +12,13 @@ import java.util.List;
  * @author Lenovo
  */
 public interface UserService {
-        public List<User> findAll();
+        public List<UserModel> findAll();
 	
-	public User findById(int theId);
+	public UserModel findById(int theId);
 	
-	public void save(User theUser);
+	public UserModel save(UserModel theUser);
 	
 	public void deleteById(int theId);
+        
+        public UserModel findByUsername(String username);
 }

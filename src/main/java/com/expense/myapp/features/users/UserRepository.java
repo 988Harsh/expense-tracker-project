@@ -14,6 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Lenovo
  */
 //@Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<UserModel, Integer>{
     
 }

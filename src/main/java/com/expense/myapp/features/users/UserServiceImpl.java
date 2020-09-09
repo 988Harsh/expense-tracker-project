@@ -8,6 +8,7 @@ package com.expense.myapp.features.users;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +20,10 @@ public class UserServiceImpl implements UserService{
    
    private UserDAOImpl userDaoImpl;
    
+   
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+   
     @Autowired
     public UserServiceImpl(UserDAOImpl theUserRepo) {
         userDaoImpl = theUserRepo;
@@ -27,15 +32,15 @@ public class UserServiceImpl implements UserService{
    
 	
 	@Override
-	public List<User> findAll() {
+	public List<UserModel> findAll() {
 		return userDaoImpl.findAll();
 	}
 
 	@Override
-	public User findById(int theId) {
-		User result = userDaoImpl.findById(theId);
+	public UserModel findById(int theId) {
+		UserModel result = userDaoImpl.findById(theId);
 		
-//		User theUser = null;
+//		UserModel theUser = null;
 		
 //		if (result.isPresent()) {
 //			theUser = result.get();
@@ -49,8 +54,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void save(User theUser) {
-		userDaoImpl.save(theUser);
+	public UserModel save(UserModel theUser) {
+                theUser.setPassword(bcryptEncoder.encode(theUser.getPassword()));
+		return userDaoImpl.save(theUser);
 	}
 
 	@Override
@@ -58,6 +64,10 @@ public class UserServiceImpl implements UserService{
 		userDaoImpl.deleteById(theId);
 	}
    
+        @Override
+	public UserModel findByUsername(String name) {
+		return userDaoImpl.findByUsername(name);
+	}
    
    
    

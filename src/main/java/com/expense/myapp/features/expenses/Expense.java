@@ -7,7 +7,7 @@ package com.expense.myapp.features.expenses;
 
 
 import com.expense.myapp.features.categories.Categories;
-import com.expense.myapp.features.users.User;
+import com.expense.myapp.features.users.UserModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
@@ -54,7 +54,7 @@ public class Expense {
     @JsonManagedReference
     @ManyToOne( cascade= { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
-    private User user; 
+    private UserModel user; 
     
     public Expense() {
     }
@@ -98,11 +98,11 @@ public class Expense {
         this.category = category;
     }
 
-    public User getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 

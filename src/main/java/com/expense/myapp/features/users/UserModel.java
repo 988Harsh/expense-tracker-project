@@ -20,18 +20,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  *
  * @author Lenovo
  */
 @Entity
 @Table(name="Users")
-public class User {
+public class UserModel {
 
-    public User() {
+    
+    public UserModel() {
     }
 
-    public User(String name, String email, String password) {
+    public UserModel(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -41,7 +44,7 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private long id;
+    private int id;
     
     @Column(name="name")
     private String name;
@@ -88,7 +91,7 @@ public class User {
     }
     
     
-    public long getId() {
+    public int getId() {
         return id;
     }
 

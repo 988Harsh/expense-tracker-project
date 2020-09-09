@@ -39,16 +39,16 @@ public class UserRestController {
 	
 	// expose "/users" and return list of users
 	@GetMapping("/users")
-	public List<User> findAll() {
+	public List<UserModel> findAll() {
 		return userService.findAll();
 	}
 
 	// add mapping for GET /users/{userId}
 	
 	@GetMapping("/users/{userId}")
-	public User getUser(@PathVariable int userId) {
+	public UserModel getUser(@PathVariable int userId) {
 		
-		User theUser = userService.findById(userId);
+		UserModel theUser = userService.findById(userId);
 		
 		if (theUser == null) {
 			throw new RuntimeException("User id not found - " + userId);
@@ -60,7 +60,7 @@ public class UserRestController {
 	// add mapping for POST /users - add new user
 	
 	@PostMapping("/users")
-	public User addUser(@RequestBody User theUser) {
+	public UserModel addUser(@RequestBody UserModel theUser) {
 		
 		// also just in case they pass an id in JSON ... set id to 0
 		// this is to force a save of new item ... instead of update
@@ -75,7 +75,7 @@ public class UserRestController {
 	// add mapping for PUT /users - update existing user
 	
 	@PutMapping("/users")
-	public User updateUser(@RequestBody User theUser) {
+	public UserModel updateUser(@RequestBody UserModel theUser) {
 		
 		userService.save(theUser);
 		
@@ -87,7 +87,7 @@ public class UserRestController {
 	@DeleteMapping("/users/{userId}")
 	public String deleteUser(@PathVariable int userId) {
 		
-		User tempUser = userService.findById(userId);
+		UserModel tempUser = userService.findById(userId);
 		
 		// throw exception if null
 		

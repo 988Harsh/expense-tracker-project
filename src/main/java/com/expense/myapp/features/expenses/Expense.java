@@ -37,7 +37,7 @@ public class Expense {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private long id;
+    private int id;
 
     @Column(name="description")
     private String description;
@@ -66,7 +66,7 @@ public class Expense {
     
     
     
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -106,6 +106,13 @@ public class Expense {
         this.user = user;
     }
 
+    public ExpenseDTORes mapResponse(){
+        
+        ExpenseDTORes res = new ExpenseDTORes(this.getId(),this.getDescription(),this.getCategory().getType(),this.getAmount());
+        
+        return res;
+        
+    }
     
     
     

@@ -5,6 +5,7 @@
  */
 package com.expense.myapp.features.expenses;
 
+import com.expense.myapp.features.users.UserModel;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class ExpenseServiceImpl implements ExpenseService{
    
 	
 	@Override
-	public List<Expense> findAll() {
-		return expenseDaoImpl.findAll();
+	public List<Expense> findAll(int uid) {
+		return expenseDaoImpl.findAll(uid);
 	}
 
 	@Override

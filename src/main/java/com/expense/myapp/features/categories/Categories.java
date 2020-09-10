@@ -29,10 +29,9 @@ public class Categories {
     public Categories() {
     }
 
-    public Categories( String type, String description) {
+    public Categories( String type) {
 //        this.expenses = expenses;
         this.type = type;
-        this.description = description;
     }
 
     
@@ -50,8 +49,6 @@ public class Categories {
     @Column(name="type")
     private String type;
     
-    @Column(name="description")
-    private String description;
     
     
 
@@ -79,14 +76,4 @@ public class Categories {
 //        this.expenses = expenses;
 //    }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    
-    
 }

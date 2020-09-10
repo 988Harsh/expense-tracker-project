@@ -9,14 +9,25 @@ package com.expense.myapp.jwt.config;
  *
  * @author Lenovo
  */
+import com.expense.myapp.features.users.UserModel;
 import java.io.Serializable;
+
 public class JwtResponse implements Serializable {
-private static final long serialVersionUID = -8091879091924046844L;
-private final String jwttoken;
-public JwtResponse(String jwttoken) {
-this.jwttoken = jwttoken;
-}
-public String getToken() {
-return this.jwttoken;
-}
+    
+    private UserModel user;
+    private static final long serialVersionUID = -8091879091924046844L;
+    private final String jwttoken;
+    
+    public JwtResponse(UserModel user,String jwttoken) {
+        this.user = user;
+        this.jwttoken = jwttoken;
+    }
+    public String getToken() {
+        return this.jwttoken;
+    }
+    
+    public UserModel getUser() {
+        return user;
+    }
+    
 }

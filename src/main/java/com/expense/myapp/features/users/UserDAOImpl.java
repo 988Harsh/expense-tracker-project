@@ -92,6 +92,7 @@ public class UserDAOImpl implements UserDAO{
         @Transactional
         public UserModel findByUsername(String username){
             
+//                System.out.println(username);
                 Session currentSession = em.unwrap(Session.class);
 				
 		// create a query  ... sort by last name
@@ -102,7 +103,6 @@ public class UserDAOImpl implements UserDAO{
 		// execute query and get result list
 		UserModel user = theQuery.getResultList().get(0);
 		
-//                System.out.println(user.getName());
 		// return the results		
 		return user;
         }

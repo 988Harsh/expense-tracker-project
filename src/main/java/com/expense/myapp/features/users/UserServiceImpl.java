@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService{
    
-   private UserDAOImpl userDaoImpl;
-   
+    @Autowired
+    private UserDAO userDaoImpl;
    
     @Autowired
     private PasswordEncoder bcryptEncoder;
@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserModel save(UserModel theUser) {
-                theUser.setPassword(bcryptEncoder.encode(theUser.getPassword()));
 		return userDaoImpl.save(theUser);
 	}
 

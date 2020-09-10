@@ -56,39 +56,39 @@ public class UserModel {
     @Column(name="password")
     private String password;
 
-    @JsonManagedReference
-    @JsonIgnore
-    @OneToMany(targetEntity=Expense.class)//fetch=FetchType.EAGER,mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-    private List<Expense> expenses; 
-
-    @JsonManagedReference
-    @JsonIgnore
-    @OneToMany(fetch=FetchType.EAGER,
-            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Tokens> tokens; 
+//    @JsonManagedReference
+//    @JsonIgnore
+//    @OneToMany(targetEntity=Expense.class)//fetch=FetchType.EAGER,mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+//    private List<Expense> expenses; 
+//
+//    @JsonManagedReference
+//    @JsonIgnore
+//    @OneToMany(fetch=FetchType.EAGER,
+//            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    private List<Tokens> tokens; 
+//    
     
-    
-    public void add(Expense expenses)
-    {
-        if(this.expenses==null)
-        {
-            this.expenses = new ArrayList<>();
-        }
-        
-        this.expenses.add(expenses);
-        expenses.setUser(this);
-    }
-    
-    public void add(Tokens tokens)
-    {
-        if(this.tokens==null)
-        {
-            this.tokens = new ArrayList<>();
-        }
-        
-        this.tokens.add(tokens);
-        tokens.setUser(this);
-    }
+//    public void add(Expense expenses)
+//    {
+//        if(this.expenses==null)
+//        {
+//            this.expenses = new ArrayList<>();
+//        }
+//        
+//        this.expenses.add(expenses);
+//        expenses.setUser(this);
+//    }
+//    
+//    public void add(Tokens tokens)
+//    {
+//        if(this.tokens==null)
+//        {
+//            this.tokens = new ArrayList<>();
+//        }
+//        
+//        this.tokens.add(tokens);
+//        tokens.setUser(this);
+//    }
     
     
     public int getId() {

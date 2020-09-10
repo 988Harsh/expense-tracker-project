@@ -5,7 +5,12 @@
  */
 package com.expense.myapp.features.expenses;
 
+import com.expense.myapp.features.categories.Categories;
+import com.expense.myapp.features.categories.CategoriesService;
+import com.expense.myapp.features.users.UserModel;
+import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +31,8 @@ public class ExpenseRestController {
 
 	private ExpenseService expenseService;
 
+        @Autowired
+        private CategoriesService categoriesService;
     public ExpenseRestController() {
     }
 	
@@ -39,14 +46,24 @@ public class ExpenseRestController {
 	
 	// expose "/expenses" and return list of expenses
 	@GetMapping("/expenses")
-	public List<Expense> findAll() {
-		return expenseService.findAll();
+	public List<ExpenseDTORes> findAll(HttpServletRequest req) {
+                UserModel user = (UserModel)req.getAttribute("user");
+                
+//                System.out.println(user.getName());
+		List<Expense> expenses = expenseService.findAll(user.getId());
+                
+                List<ExpenseDTORes> res = new ArrayList<>();
+                
+                for(Expense ex : expenses){
+                    res.add(ex.mapResponse());
+                }
+                return res;
 	}
 
 	// add mapping for GET /expenses/{expenseId}
 	
 	@GetMapping("/expenses/{expenseId}")
-	public Expense getExpense(@PathVariable int expenseId) {
+	public ExpenseDTORes getExpense(@PathVariable int expenseId) {
 		
 		Expense theExpense = expenseService.findById(expenseId);
 		
@@ -54,32 +71,47 @@ public class ExpenseRestController {
 			throw new RuntimeException("Expense id not found - " + expenseId);
 		}
 		
-		return theExpense;
+		return theExpense.mapResponse();
 	}
 	
 	// add mapping for POST /expenses - add new expense
 	
 	@PostMapping("/expenses")
-	public Expense addExpense(@RequestBody Expense theExpense) {
+	public ExpenseDTORes addExpense(@RequestBody ExpenseDTO expense,HttpServletRequest req) {
 		
+                UserModel user = (UserModel)req.getAttribute("user");
+                
+                Expense theExpense = new Expense(expense.getDescription(),expense.getAmount());
+                System.out.println("controller "+expense.getCategory());
 		// also just in case they pass an id in JSON ... set id to 0
 		// this is to force a save of new item ... instead of update
-		
-		theExpense.setId(0);
-		
-		expenseService.save(theExpense);
-		
-		return theExpense;
+                Categories expenseCategory = categoriesService.findByCategoryname(expense.getCategory());
+                
+                theExpense.setId(0);
+		theExpense.setUser(user);
+                theExpense.setCategory(expenseCategory);
+                
+                expenseService.save(theExpense);
+                return theExpense.mapResponse();
 	}
 	
 	// add mapping for PUT /expenses - update existing expense
 	
-	@PutMapping("/expenses")
-	public Expense updateExpense(@RequestBody Expense theExpense) {
+	@PutMapping(value="/expenses")
+	public ExpenseDTORes updateExpense(@RequestBody ExpenseDTO expense,HttpServletRequest req) {
 		
-		expenseService.save(theExpense);
+                UserModel user = (UserModel)req.getAttribute("user");
+                Expense theExpense = new Expense(expense.getDescription(),expense.getAmount());
+                
+                System.out.println("controller "+user.getName()+" and "+expense.getCategory());
+		Categories expenseCategory = categoriesService.findByCategoryname(expense.getCategory());
+                
+                theExpense.setUser(user);
+                theExpense.setCategory(expenseCategory);
 		
-		return theExpense;
+                expenseService.save(theExpense);
+		
+		return theExpense.mapResponse();
 	}
 	
 	// add mapping for DELETE /expenses/{expenseId} - delete expense

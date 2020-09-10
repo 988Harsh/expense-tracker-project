@@ -5,6 +5,7 @@
  */
 package com.expense.myapp.features.expenses;
 
+import com.expense.myapp.features.users.UserModel;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.hibernate.Session;
@@ -31,14 +32,15 @@ public class ExpenseDAOImpl implements ExpenseDAO{
     
 	@Override
         @Transactional
-	public List<Expense> findAll() {
+	public List<Expense> findAll(int uid) {
 		
 		// get the current hibernate session
 		Session currentSession = em.unwrap(Session.class);
 				
 		// create a query  ... sort by last name
 		Query<Expense> theQuery = 
-				currentSession.createQuery("from Expense",Expense.class);
+				currentSession.createQuery("from Expense where user_id=:uid",Expense.class);
+                theQuery.setParameter("uid",uid);
 		
 		// execute query and get result list
 		List<Expense> Expenses = theQuery.getResultList();

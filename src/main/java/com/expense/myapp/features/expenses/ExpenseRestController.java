@@ -43,29 +43,38 @@ public class ExpenseRestController {
 	public ExpenseRestController(ExpenseService theExpenseService) {
 		expenseService = theExpenseService;
 	}
+        
+        @GetMapping("/expensesAll")
+        public List<ExpenseDTORes> findAllPages(HttpServletRequest req){
+            UserModel user = (UserModel)req.getAttribute("user");
+                
+                List<ExpenseDTORes> res= expenseService.findAllPages(user.getId());
+		
+                return res;
+        }
 	
 	// expose "/expenses" and return list of expenses
 	@GetMapping("/expenses")
-	public List<ExpenseDTORes> findAll(HttpServletRequest req) {
+	public Res findAll(HttpServletRequest req) {
                 UserModel user = (UserModel)req.getAttribute("user");
-                
-//                System.out.println(user.getName());
-		List<Expense> expenses = expenseService.findAll(user.getId());
-                
-                List<ExpenseDTORes> res = new ArrayList<>();
-                
-                for(Expense ex : expenses){
-                    res.add(ex.mapResponse());
+                int page;
+                try{
+                    page = Integer.parseInt(req.getParameter("page"));
+                }catch(Exception e){
+                    page = 1;
                 }
+                
+                Res res = expenseService.findAll(user.getId(),page);
+		
                 return res;
 	}
 
 	// add mapping for GET /expenses/{expenseId}
 	
 	@GetMapping("/expenses/{expenseId}")
-	public ExpenseDTORes getExpense(@PathVariable int expenseId) {
-		
-		Expense theExpense = expenseService.findById(expenseId);
+	public ExpenseDTORes getExpense(@PathVariable int expenseId,HttpServletRequest req) {
+		UserModel user = (UserModel)req.getAttribute("user");
+		Expense theExpense = expenseService.findById(user.getId(),expenseId);
 		
 		if (theExpense == null) {
 			throw new RuntimeException("Expense id not found - " + expenseId);
@@ -77,7 +86,7 @@ public class ExpenseRestController {
 	// add mapping for POST /expenses - add new expense
 	
 	@PostMapping("/expenses")
-	public ExpenseDTORes addExpense(@RequestBody ExpenseDTO expense,HttpServletRequest req) {
+	public ExpenseDTORes addExpense(@RequestBody ExpenseDTOReq expense,HttpServletRequest req) {
 		
                 UserModel user = (UserModel)req.getAttribute("user");
                 
@@ -91,25 +100,27 @@ public class ExpenseRestController {
 		theExpense.setUser(user);
                 theExpense.setCategory(expenseCategory);
                 
-                expenseService.save(theExpense);
+                theExpense = expenseService.save(theExpense);
                 return theExpense.mapResponse();
 	}
 	
 	// add mapping for PUT /expenses - update existing expense
 	
 	@PutMapping(value="/expenses")
-	public ExpenseDTORes updateExpense(@RequestBody ExpenseDTO expense,HttpServletRequest req) {
+	public ExpenseDTORes updateExpense(@RequestBody ExpenseDTOReq expense,HttpServletRequest req) {
 		
                 UserModel user = (UserModel)req.getAttribute("user");
-                Expense theExpense = new Expense(expense.getDescription(),expense.getAmount());
                 
+                Expense theExpense = new Expense(expense.getDescription(),expense.getAmount());
+                theExpense.setId(expense.getId());
                 System.out.println("controller "+user.getName()+" and "+expense.getCategory());
 		Categories expenseCategory = categoriesService.findByCategoryname(expense.getCategory());
                 
+                theExpense.setId(expense.getId());
                 theExpense.setUser(user);
                 theExpense.setCategory(expenseCategory);
 		
-                expenseService.save(theExpense);
+                theExpense = expenseService.save(theExpense);
 		
 		return theExpense.mapResponse();
 	}
@@ -117,9 +128,9 @@ public class ExpenseRestController {
 	// add mapping for DELETE /expenses/{expenseId} - delete expense
 	
 	@DeleteMapping("/expenses/{expenseId}")
-	public String deleteExpense(@PathVariable int expenseId) {
-		
-		Expense tempExpense = expenseService.findById(expenseId);
+	public ExpenseDTORes deleteExpense(@PathVariable int expenseId,HttpServletRequest req) {
+		UserModel user = (UserModel)req.getAttribute("user");
+		Expense tempExpense = expenseService.findById(user.getId(),expenseId);
 		
 		// throw exception if null
 		
@@ -128,7 +139,7 @@ public class ExpenseRestController {
 		}
 		
 		expenseService.deleteById(expenseId);
-		
-		return "Deleted expense id - " + expenseId;
+                Expense ex = expenseService.findById(user.getId(), expenseId);
+		return ex.mapResponse();
 	}
 }

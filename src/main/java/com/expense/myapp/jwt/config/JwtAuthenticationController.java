@@ -53,8 +53,7 @@ public class JwtAuthenticationController {
 //                String password = req.getParameter("Password");
 //                JwtRequest authenticationRequest = new JwtRequest(username,password);
                 
-                System.out.println(authenticationRequest.getPassword()+ " /auth");
-		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+                authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
                 UserModel user = userService.findByUsername(authenticationRequest.getUsername());
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
@@ -76,6 +75,7 @@ public class JwtAuthenticationController {
 
 	private void authenticate(String username, String password) throws Exception {
 		try {
+                        System.out.println(password+" "+username +" /auth");
 //                        System.out.println(username + " " + bcrypt.encode(password) );
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {

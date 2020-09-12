@@ -13,12 +13,15 @@ import java.util.List;
  * @author Lenovo
  */
 public interface ExpenseService {
-        public List<Expense> findAll(int uid);
+        public Res findAll(int uid,int page);
 	
-	public Expense findById(int theId);
+        public List<ExpenseDTORes> findAllPages(int uid);
+        
+	public Expense findById(int uid,int theId);
 	
-	public void save(Expense theExpense);
+	public Expense save(Expense theExpense);
 	
+        
 	public void deleteById(int theId);
 }
 

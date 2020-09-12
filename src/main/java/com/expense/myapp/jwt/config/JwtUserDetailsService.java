@@ -44,6 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 
 	public UserModel save(UserModel user) {
+                userDao.setId(user.getId());
                 userDao.setName(user.getName());
 		userDao.setPassword(bcryptEncoder.encode(user.getPassword()));
                 userDao.setEmail(user.getEmail());

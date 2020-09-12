@@ -13,11 +13,14 @@ import java.util.List;
  * @author Lenovo
  */
 public interface ExpenseDAO {
-        public List<Expense> findAll(int uid);
+        public Res findAll(int uid, int page);
 
-	public void save(Expense theExpense);
+        public List<ExpenseDTORes> findAllPages(int uid);
+        
+	public Expense save(Expense theExpense);
+        
 
-	public Expense findById(int theId);
+	public Expense findById(int uid,int theId);
 
 	public void deleteById(int theId);
 }

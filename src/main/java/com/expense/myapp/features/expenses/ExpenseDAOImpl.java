@@ -6,6 +6,7 @@
 package com.expense.myapp.features.expenses;
 
 import com.expense.myapp.features.users.UserModel;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.hibernate.Session;
@@ -32,11 +33,38 @@ public class ExpenseDAOImpl implements ExpenseDAO{
     
 	@Override
         @Transactional
-	public List<Expense> findAll(int uid) {
+	public Res findAll(int uid, int page) {
 		
 		// get the current hibernate session
 		Session currentSession = em.unwrap(Session.class);
-				
+		// create a query  ... sort by last name
+		Query<Expense> theQuery = 
+				currentSession.createQuery("from Expense where user_id=:uid",Expense.class);
+                theQuery.setFirstResult((page-1)*3);
+                theQuery.setMaxResults(3);
+                theQuery.setParameter("uid",uid);
+		
+		// execute query and get result list
+		List<Expense> Expenses = theQuery.getResultList();
+                List<ExpenseDTORes> exRes = new ArrayList<>();
+                for(Expense ex : Expenses){
+                    exRes.add(ex.mapResponse());
+                }
+		
+                Query q = currentSession.createQuery("select count(*) from Expense where user_id=:uid");
+                q.setParameter("uid",uid);
+                long c = (long) q.uniqueResult();
+		Res res = new Res(c,exRes);
+                
+		return res;
+	}
+        
+        @Override
+        @Transactional
+	public List<ExpenseDTORes> findAllPages(int uid) {
+		
+		// get the current hibernate session
+		Session currentSession = em.unwrap(Session.class);
 		// create a query  ... sort by last name
 		Query<Expense> theQuery = 
 				currentSession.createQuery("from Expense where user_id=:uid",Expense.class);
@@ -44,24 +72,36 @@ public class ExpenseDAOImpl implements ExpenseDAO{
 		
 		// execute query and get result list
 		List<Expense> Expenses = theQuery.getResultList();
-				
-		// return the results		
-		return Expenses;
+                List<ExpenseDTORes> exRes = new ArrayList<>();
+                for(Expense ex : Expenses){
+                    exRes.add(ex.mapResponse());
+                } 
+		return exRes;
 	}
+        
+        
 
 	@Override
-	public void save(Expense theExpense) {
+        @Transactional
+	public Expense save(Expense theExpense) {
 
 		// get current hibernate session
 		Session currentSession = em.unwrap(Session.class);
 		
 		// save/upate the Expense ... finally LOL
 		currentSession.saveOrUpdate(theExpense);
-		
+                
+                if(theExpense.getId() != 0)
+                return currentSession.get(Expense.class,theExpense.getId());
+                else {
+                    Query<Expense> q = currentSession.createQuery("from Expense where id=(LAST_INSERT_ID())");
+                    return q.getResultList().get(0);
+                }
 	}
+        
 
 	@Override
-	public Expense findById(int theId) {
+	public Expense findById(int uid,int theId) {
 
 		// get the current hibernate session
 		Session currentSession = em.unwrap(Session.class);
@@ -73,6 +113,7 @@ public class ExpenseDAOImpl implements ExpenseDAO{
 	}
 
 	@Override
+        @Transactional
 	public void deleteById(int theId) {
 
 		// get the current hibernate session

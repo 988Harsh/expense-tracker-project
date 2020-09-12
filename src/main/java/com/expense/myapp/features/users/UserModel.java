@@ -6,10 +6,10 @@
 package com.expense.myapp.features.users;
 
 import com.expense.myapp.features.expenses.Expense;
-import com.expense.myapp.features.tokens.Tokens;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +20,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  *
@@ -56,26 +62,27 @@ public class UserModel {
     @Column(name="password")
     private String password;
 
+    @Column(name = "created_at", nullable = false, updatable=false)
+    @CreationTimestamp
+    private Date created_at;
+    
+    @Column(name="updated_at")
+    @UpdateTimestamp
+    private Date updated_at;
+    
 //    @JsonManagedReference
 //    @JsonIgnore
-//    @OneToMany(targetEntity=Expense.class)//fetch=FetchType.EAGER,mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-//    private List<Expense> expenses; 
-//
-//    @JsonManagedReference
-//    @JsonIgnore
-//    @OneToMany(fetch=FetchType.EAGER,
-//            mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    private List<Tokens> tokens; 
-//    
+//    @OneToMany(cascade = {CascadeType.ALL},fetch= FetchType.EAGER,mappedBy="user")//fetch=FetchType.EAGER,mappedBy="user", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+//    private List<Expense> expense; 
     
 //    public void add(Expense expenses)
 //    {
-//        if(this.expenses==null)
+//        if(this.expense==null)
 //        {
-//            this.expenses = new ArrayList<>();
+//            this.expense = new ArrayList<>();
 //        }
 //        
-//        this.expenses.add(expenses);
+//        this.expense.add(expenses);
 //        expenses.setUser(this);
 //    }
 //    
@@ -122,6 +129,32 @@ public class UserModel {
     public void setPassword(String password) {
         this.password = password;
     }
+
+//    public List<Expense> getExpense() {
+//        return expense;
+//    }
+//
+//    public void setExpense(List<Expense> expense) {
+//        this.expense = expense;
+//    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public Date getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
+
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    
     
     
     

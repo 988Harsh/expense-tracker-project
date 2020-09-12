@@ -9,11 +9,20 @@ package com.expense.myapp.features.expenses;
  *
  * @author Lenovo
  */
-public class ExpenseDTO {
+public class ExpenseDTOReq {
     
+    private int id;
     private String category;
     private String description;
     private float amount;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCategory() {
         return category;

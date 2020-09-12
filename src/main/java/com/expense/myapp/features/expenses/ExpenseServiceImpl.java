@@ -28,18 +28,21 @@ public class ExpenseServiceImpl implements ExpenseService{
    
 	
 	@Override
-	public List<Expense> findAll(int uid) {
-		return expenseDaoImpl.findAll(uid);
+	public Res findAll(int uid, int page) {
+		return expenseDaoImpl.findAll(uid,page);
+	}
+        
+        @Override
+	public List<ExpenseDTORes> findAllPages(int uid) {
+		return expenseDaoImpl.findAllPages(uid);
 	}
 
 	@Override
-	public Expense findById(int theId) {
-		Expense result = expenseDaoImpl.findById(theId);
+	public Expense findById(int uid,int theId) {
+		Expense result = expenseDaoImpl.findById(uid,theId);
 		
 //		Expense theExpense = null;
-		
 //		if (result.isPresent()) {
-//			theExpense = result.get();
 //		}
 //		else {
 //			// we didn't find the expense
@@ -50,9 +53,11 @@ public class ExpenseServiceImpl implements ExpenseService{
 	}
 
 	@Override
-	public void save(Expense theExpense) {
-		expenseDaoImpl.save(theExpense);
+	public Expense save(Expense theExpense) {
+		return expenseDaoImpl.save(theExpense);
 	}
+        
+        
 
 	@Override
 	public void deleteById(int theId) {

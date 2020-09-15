@@ -11,6 +11,7 @@ import com.expense.myapp.features.users.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,12 +87,12 @@ public class ExpenseRestController {
 	// add mapping for POST /expenses - add new expense
 	
 	@PostMapping("/expenses")
-	public ExpenseDTORes addExpense(@RequestBody ExpenseDTOReq expense,HttpServletRequest req) {
+	public ExpenseDTORes addExpense(@RequestBody ExpenseDTOReq expense,HttpServletRequest req,HttpServletResponse res) {
 		
                 UserModel user = (UserModel)req.getAttribute("user");
                 
                 Expense theExpense = new Expense(expense.getDescription(),expense.getAmount());
-                System.out.println("controller "+expense.getCategory());
+//                System.out.println("controller "+expense.getCategory());
 		// also just in case they pass an id in JSON ... set id to 0
 		// this is to force a save of new item ... instead of update
                 Categories expenseCategory = categoriesService.findByCategoryname(expense.getCategory());
@@ -101,6 +102,8 @@ public class ExpenseRestController {
                 theExpense.setCategory(expenseCategory);
                 
                 theExpense = expenseService.save(theExpense);
+                
+                
                 return theExpense.mapResponse();
 	}
 	
